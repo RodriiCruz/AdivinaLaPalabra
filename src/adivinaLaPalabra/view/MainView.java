@@ -30,6 +30,11 @@ import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
 
 import adivinaLaPalabra.model.Game;
+import adivinaLaPalabra.patterns.strategy.Context;
+import adivinaLaPalabra.patterns.strategy.IPositioningStrategy;
+import adivinaLaPalabra.patterns.strategy.LongWord;
+import adivinaLaPalabra.patterns.strategy.MiddleWord;
+import adivinaLaPalabra.patterns.strategy.ShortWord;
 
 /**
  * 
@@ -120,6 +125,23 @@ public class MainView extends JFrame {
 		lblValorIntentos.setBounds(217, 293, 45, 25);
 		contentPane.add(lblValorIntentos);
 	}
+	
+	private IPositioningStrategy getStrategy(int longitud) {
+		IPositioningStrategy estrategia = null;
+		switch (juego.getPalabra().length) {
+		case 5:
+			estrategia = new ShortWord();
+			break;
+		case 6:
+			estrategia = new MiddleWord();
+			break;
+		case 7:
+			estrategia = new LongWord();
+			break;
+		}
+		
+        return estrategia;
+    }
 
 	private void inicializarJuego() {
 		int indice = (int) (Math.random() * 12);
@@ -128,17 +150,9 @@ public class MainView extends JFrame {
 		juego.setPalabra(DEFINICIONES.get(indice).getPalabra().toCharArray());
 		juego.setDefinicion(DEFINICIONES.get(indice).getDefinicion());
 
-		switch (juego.getPalabra().length) {
-		case 5:
-			ubicarCincoLetras();
-			break;
-		case 6:
-			ubicarSeisLetras();
-			break;
-		case 7:
-			ubicarSieteLetras();
-			break;
-		}
+		IPositioningStrategy posicionamientoLetras = getStrategy(juego.getPalabra().length);
+		Context contexto = new Context(posicionamientoLetras);
+		contexto.executeStrategy(letras);
 
 		txtDefinicion.setText(DEFINICION + juego.getDefinicion());
 	}
@@ -307,57 +321,6 @@ public class MainView extends JFrame {
 			lbl.setFont(new Font(FUENTE, Font.PLAIN, 20));
 			panelDefiniciones.add(lbl);
 		});
-	}
-
-	private void ubicarSieteLetras() {
-		letras.get(0).setBounds(47, 0, 23, 59);
-
-		letras.get(1).setBounds(117, 0, 23, 59);
-
-		letras.get(2).setBounds(187, 0, 23, 59);
-
-		letras.get(3).setBounds(257, 0, 23, 59);
-
-		letras.get(4).setBounds(327, 0, 23, 59);
-
-		letras.get(5).setBounds(397, 0, 23, 59);
-		letras.get(5).setVisible(true);
-
-		letras.get(6).setBounds(467, 0, 23, 59);
-		letras.get(6).setVisible(true);
-	}
-
-	private void ubicarSeisLetras() {
-		letras.get(0).setBounds(57, 0, 23, 59);
-
-		letras.get(1).setBounds(137, 0, 23, 59);
-
-		letras.get(2).setBounds(217, 0, 23, 59);
-
-		letras.get(3).setBounds(297, 0, 23, 59);
-
-		letras.get(4).setBounds(377, 0, 23, 59);
-
-		letras.get(5).setBounds(457, 0, 23, 59);
-		letras.get(5).setVisible(true);
-		
-		letras.get(6).setVisible(false);
-	}
-
-	private void ubicarCincoLetras() {
-		letras.get(0).setBounds(70, 0, 23, 59);
-
-		letras.get(1).setBounds(163, 0, 23, 59);
-
-		letras.get(2).setBounds(256, 0, 23, 59);
-
-		letras.get(3).setBounds(349, 0, 23, 59);
-
-		letras.get(4).setBounds(442, 0, 23, 59);
-		
-		letras.get(5).setVisible(false);
-		
-		letras.get(6).setVisible(false);
 	}
 
 	private ActionListener getActionListener(char letra, JButton boton) {
