@@ -35,7 +35,7 @@ public class Constant {
 	public static final String SALIR = "Salir";
 	public static final String REINICIAR = "Reiniciar";
 	public static final String GANASTE = "Ganaste!";
-	public static final String PERDISTE = "Perdiste!";
+	public static final String PERDISTE = "Perdiste!\nLa palabra era: ";
 	public static final String ESPACIO_VACIO = "_";
 
 }

@@ -37,7 +37,7 @@ import adivinaLaPalabra.patterns.strategy.MiddleWord;
 import adivinaLaPalabra.patterns.strategy.ShortWord;
 
 /**
- * 
+ *
  * @author Rodrigo Cruz <rodriikc@gmail.com>
  */
 public class MainView extends JFrame {
@@ -50,6 +50,7 @@ public class MainView extends JFrame {
 	private JLabel lblValorIntentos;
 	private List<JButton> botonesPresionados;
 	private List<JLabel> letras;
+	private String palabra;
 
 	public MainView() {
 		botonesPresionados = new ArrayList<>();
@@ -125,7 +126,7 @@ public class MainView extends JFrame {
 		lblValorIntentos.setBounds(217, 293, 45, 25);
 		contentPane.add(lblValorIntentos);
 	}
-	
+
 	private IPositioningStrategy getStrategy(int longitud) {
 		IPositioningStrategy estrategia = null;
 		switch (juego.getPalabra().length) {
@@ -139,15 +140,16 @@ public class MainView extends JFrame {
 			estrategia = new LongWord();
 			break;
 		}
-		
-        return estrategia;
-    }
+
+		return estrategia;
+	}
 
 	private void inicializarJuego() {
 		int indice = (int) (Math.random() * 12);
+		palabra = DEFINICIONES.get(indice).getPalabra();
 
 		juego = new Game();
-		juego.setPalabra(DEFINICIONES.get(indice).getPalabra().toCharArray());
+		juego.setPalabra(palabra.toCharArray());
 		juego.setDefinicion(DEFINICIONES.get(indice).getDefinicion());
 
 		IPositioningStrategy posicionamientoLetras = getStrategy(juego.getPalabra().length);
@@ -315,7 +317,6 @@ public class MainView extends JFrame {
 	}
 
 	private void inicializarLetras() {
-
 		letras.stream().forEach(lbl -> {
 			lbl.setText(ESPACIO_VACIO);
 			lbl.setFont(new Font(FUENTE, Font.PLAIN, 20));
@@ -364,7 +365,7 @@ public class MainView extends JFrame {
 		}
 
 		if (juego.getIntentos() == 0) {
-			JOptionPane.showMessageDialog(null, PERDISTE);
+			JOptionPane.showMessageDialog(null, PERDISTE + palabra);
 			reiniciarJuego();
 		}
 	}
